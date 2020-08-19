@@ -1,6 +1,7 @@
 package exercicioIcognitusSA;
 
 import java.util.Date;
+import java.util.Random;
 
 public abstract class Funcionario {
 	private String endereco;
@@ -11,10 +12,11 @@ public abstract class Funcionario {
 	private Date dataAdmissao;
 	private Date dataDemissao;
 	private Date ultimasFerias;
+	private Boolean deFerias = false;
 
 	// Constructor
 	public Funcionario(String endereco, String nome, String cpf, String setor, double salarioBase, Date dataAdmissao,
-			Date dataDemissao, Date ultimasFerias) {
+			Date dataDemissao) {
 		super();
 		this.endereco = endereco;
 		this.nome = nome;
@@ -23,7 +25,6 @@ public abstract class Funcionario {
 		this.salarioBase = salarioBase;
 		this.dataAdmissao = dataAdmissao;
 		this.dataDemissao = dataDemissao;
-		this.ultimasFerias = ultimasFerias;
 	}
 
 	// Getters and Setters
@@ -93,21 +94,69 @@ public abstract class Funcionario {
 
 	// Other methods
 	public double contraCheque() {
+		System.out.println(this.nome + "$: Funcionario: " + this.nome + "$ Salário: " + this.salarioBase);
 		return this.salarioBase;
 	}
 
+	
+	// Esta função somente pemite o funcionario requisitar as férias, porém não dá férias ao funcionário, tendo em vista
+	// que para dar férias seriam necessárias outras informações como, quantos dias de férias, quando as férias começam.
+	// Além disso, as férias devem tem permissão por parte da empresa pois há caso em que, mesmo o funcionário tendo direito às férias
+	// a empresa não pode disponibilizar.
+	// Desse modo esta função, no momento, somentente permite o funcionario requisitar as férias. Esta requisição será enviado para o 
+	// RH analisá a posibilidade de dar as férias solicitadas.
 	public boolean requisitarFerias() {
+		var qtdMesesDesdeUltimasFerias = contadorDeMeses(this.ultimasFerias, new Date()) == null ? "Nunca tirou férias"
+				: contadorDeMeses(this.ultimasFerias, new Date());
 		Long qtdMesesDesdeAdmissao = contadorDeMeses(this.dataAdmissao, new Date());
-		if (qtdMesesDesdeAdmissao >= 11){
-			if ((this.ultimasFerias == null) || (contadorDeMeses(this.ultimasFerias, new Date()) >= 4))  {
-				System.out.println("Férias disponíveis - férias requisitadas.");
+		if (qtdMesesDesdeAdmissao >= 11) {
+			if ((this.ultimasFerias == null) || (contadorDeMeses(this.ultimasFerias, new Date()) >= 4)) {
+				System.out.println(this.nome + "$: Férias disponíveis - férias requisitadas. Aguarde a resposta do RH.");
 				return true;
 			} else {
-				System.out.println("Férias indisponíveis.");
+				System.out
+						.println(this.nome + "$: Qtd meses na empresa: " + qtdMesesDesdeAdmissao + " - Qtd meses desde ultima ferias: "
+								+ qtdMesesDesdeUltimasFerias + " - Férias indisponíveis. :/");
 				return false;
 			}
 		} else {
-			System.out.println("Férias indisponíveis.");
+			System.out.println(this.nome + "$: Qtd meses na empresa: " + qtdMesesDesdeAdmissao + " - Férias indisponíveis. :(");
+			return false;
+		}
+	}
+
+	public Boolean getDeFerias() {
+		return deFerias;
+	}
+
+	public void setDeFerias(Boolean deFerias) {
+		this.deFerias = deFerias;
+	}
+
+	public boolean trabalhar() {
+		if (this.deFerias) {
+			System.out.println(this.nome + "$: Você está de férias e não pode trabalhar.");
+			return false;
+		}else if (this.dataDemissao != null) {
+			System.out.println(this.nome + "$: Você já foi demitid@ e não pode trabalhar.");
+			return false;			
+		}
+		System.out.println(this.nome + "$: Trabalhando...");
+		return true;
+	}
+
+	public boolean pedirDemissao() {
+		System.out.println(this.nome + "$: sua Solicitação de Demissão foi enviada.");
+		return true;
+	}
+
+	public boolean solicitarAumento() {
+		var nRandom = new Random();
+		if (nRandom.nextBoolean()) {
+			System.out.println(this.nome + "$: Parabens! A empresa concedeu o seu aumento. :)");
+			return true;
+		} else {
+			System.out.println(this.nome + "$: Infelizmente o seu aumento não pode ser concedido. :(");
 			return false;
 		}
 	}
