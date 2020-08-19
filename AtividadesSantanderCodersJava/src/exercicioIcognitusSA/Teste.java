@@ -2,17 +2,22 @@ package exercicioIcognitusSA;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Scanner;
 
 public class Teste { 
 	
 	
 	public static void main(String[] args) {
-//		public String data2;
-//		public String data1;
-		Scanner c = new Scanner(System.in);
-		Date data = new Date();
-		Date data1 = c.nextLine();
-		System.out.println(data1);
+		Date data1 = new Date(), data2 = new Date();
+
+		Calendar c1 = Calendar.getInstance();
+		c1.set(2020, 0, 1);
+		data1.setTime(c1.getTimeInMillis());
+		
+		c1.set(2020, 11, 31);
+		data2.setTime(c1.getTimeInMillis());
+
+		System.out.println((data2.getTime() - data1.getTime())/1000/60/60/24);
+		
+		
 	}
 }

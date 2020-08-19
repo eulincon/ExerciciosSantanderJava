@@ -1,7 +1,11 @@
 package exercicioInterface;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TorreDeControle {
 	Voador voadores[];
+	List<Voador> listaVoadores = new ArrayList<Voador>();
 
 	public TorreDeControle(Voador[] voadores) {
 		super();
